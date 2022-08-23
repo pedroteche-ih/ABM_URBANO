@@ -160,29 +160,37 @@ for dens in dens_mu:
         for css in casa_scale:
             for rmu in rua_mu:
                 for rsd in rua_sd:
-                    teste = MoneyModel(int(10 * 10 * dens), 10, 10, csh, css, rmu, rsd)
-                    for i in range(it):
-                        teste.step()
-                    if first:
-                        dados_simulacao = (
-                            teste.datacollector.get_model_vars_dataframe().iloc[-1:]
-                        )
-                        dados_simulacao["dens_mu"] = dens
-                        dados_simulacao["casa_shape"] = csh
-                        dados_simulacao["casa_scale"] = css
-                        dados_simulacao["rua_mu"] = rmu
-                        dados_simulacao["rua_sd"] = rsd
-                        first = False
+                    num_aleatorio = random.random()
+                    if num_aleatorio < 0.1:
+                        teste = MoneyModel(int(10 * 10 * dens), 10, 10, csh, css, rmu, rsd)
+                        for i in range(it):
+                            teste.step()
+                        if first:
+                            dados_simulacao = (
+                                teste.datacollector.get_model_vars_dataframe().iloc[-1:]
+                            )
+                            dados_simulacao["dens_mu"] = dens
+                            dados_simulacao["casa_shape"] = csh
+                            dados_simulacao["casa_scale"] = css
+                            dados_simulacao["rua_mu"] = rmu
+                            dados_simulacao["rua_sd"] = rsd
+                            first = False
+                        else:
+                            dados_simulacao_atual = (
+                                teste.datacollector.get_model_vars_dataframe().iloc[-1:]
+                            )
+                            dados_simulacao_atual["dens_mu"] = dens
+                            dados_simulacao_atual["casa_shape"] = csh
+                            dados_simulacao_atual["casa_scale"] = css
+                            dados_simulacao_atual["rua_mu"] = rmu
+                            dados_simulacao_atual["rua_sd"] = rsd
+                            dados_simulacao = dados_simulacao.append(dados_simulacao_atual)
                     else:
-                        dados_simulacao_atual = (
-                            teste.datacollector.get_model_vars_dataframe().iloc[-1:]
-                        )
-                        dados_simulacao_atual["dens_mu"] = dens
-                        dados_simulacao_atual["casa_shape"] = csh
-                        dados_simulacao_atual["casa_scale"] = css
-                        dados_simulacao_atual["rua_mu"] = rmu
-                        dados_simulacao_atual["rua_sd"] = rsd
-                        dados_simulacao = dados_simulacao.append(dados_simulacao_atual)
+                        pass
+
+
+
+                    
 #%%
 # tivemos emergencia com:
 # (int(10*10*50), 10, 10, 3, 42, 3, 57)
